@@ -1,0 +1,31 @@
+# Scenario 2: ImagePullBackOff — Wrong Image Tag
+# Kubernetes cannot pull the image because the tag doesn't exist
+#
+# Apply: kubectl apply -f 02-imagepull.yaml
+# Clean: kubectl delete -f 02-imagepull.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: default
+  labels:
+    app: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          # This image tag does not exist — will cause ImagePullBackOff
+          image: nginx:this-tag-does-not-exist-999
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"

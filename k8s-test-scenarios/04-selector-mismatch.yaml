@@ -1,0 +1,48 @@
+# Scenario 4: Service Selector Mismatch — Zero endpoints
+# Service selects "app: frontend-v2" but pod has label "app: frontend"
+# This means traffic can never reach the pod
+#
+# Apply: kubectl apply -f 04-selector-mismatch.yaml
+# Clean: kubectl delete -f 04-selector-mismatch.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: default
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend      # <-- Pod label is "frontend"
+  template:
+    metadata:
+      labels:
+        app: frontend    # <-- Pod has this label
+    spec:
+      containers:
+        - name: frontend
+          image: nginx:stable
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  namespace: default
+spec:
+  selector:
+    app: frontend-v2     # <-- MISMATCH: selects "frontend-v2" but no pod has this label
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

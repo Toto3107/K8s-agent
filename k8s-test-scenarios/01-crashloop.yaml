@@ -1,0 +1,40 @@
+# Scenario 1: CrashLoopBackOff — Missing Environment Variable
+# The app will crash on startup because DATABASE_URL is missing
+#
+# Apply: kubectl apply -f 01-crashloop.yaml
+# Clean: kubectl delete -f 01-crashloop.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: default
+  labels:
+    app: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: busybox:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Starting payment service..."
+              if [ -z "$DATABASE_URL" ]; then
+                echo "FATAL: DATABASE_URL environment variable is not set!"
+                echo "Cannot connect to database. Exiting."
+                exit 1
+              fi
+              echo "Connected to database. Running..."
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
