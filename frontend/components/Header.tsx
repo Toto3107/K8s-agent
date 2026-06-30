@@ -1,6 +1,19 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+
 export function Header() {
+  const [time, setTime] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Only run on client — avoids server/client mismatch
+    setTime(new Date().toLocaleTimeString())
+    const interval = setInterval(() => {
+      setTime(new Date().toLocaleTimeString())
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div className="border-b border-terminal-border pb-6">
       <div className="flex items-start justify-between">
@@ -25,7 +38,7 @@ export function Header() {
             <span className="text-terminal-dim text-xs font-mono">API Online</span>
           </div>
           <div className="text-terminal-dim text-xs font-mono">
-            {new Date().toLocaleTimeString()}
+            {time ?? '—'}
           </div>
         </div>
       </div>

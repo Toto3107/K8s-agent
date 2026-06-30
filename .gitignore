@@ -1,23 +1,4 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-venv/
-*.egg-info/
-dist/
-build/
-
-# Node
-node_modules/
-.next/
-.nuxt/
-out/
-dist/
-
-# Env
-.env
-.env.local# ── Python ────────────────────────────────────────────────
+# ── Python ────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
@@ -63,6 +44,7 @@ out/
 .vercel/
 *.tsbuildinfo
 next-env.d.ts
+package-lock.json
 
 # ── Environment files ─────────────────────────────────────
 .env
@@ -95,7 +77,7 @@ pnpm-debug.log*
 # ── Docker ────────────────────────────────────────────────
 .docker/
 
-# ── Kubernetes / secrets ──────────────────────────────────
+# ── Kubernetes / secrets ───────────────────────────────────
 *.kubeconfig
 kubeconfig
 *.pem
@@ -108,19 +90,3 @@ kubeconfig
 .cache/
 tmp/
 temp/
-.env.*.local
-
-# IDE
-.idea/
-.vscode/
-*.swp
-.DS_Store
-
-# Logs
-*.log
-logs/
-
-# Kubernetes
-*.kubeconfig
-kubeconfig
-venv/
